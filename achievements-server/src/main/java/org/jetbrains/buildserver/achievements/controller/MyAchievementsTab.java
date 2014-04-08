@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MyAchievementsTab extends SimpleCustomTab {
+  private static final String TAB_TITLE = "My Achievements";
   private final AchievementsGrantor myAchievementsGrantor;
 
   public MyAchievementsTab(@NotNull PagePlaces pagePlaces, @NotNull PluginDescriptor pluginDescriptor, @NotNull AchievementsGrantor achievementsGrantor) {
@@ -23,6 +24,7 @@ public class MyAchievementsTab extends SimpleCustomTab {
     setPluginName(pluginDescriptor.getPluginName());
     setPlaceId(PlaceId.MY_TOOLS_TABS);
     setIncludeUrl(pluginDescriptor.getPluginResourcesPath("/myAchievements.jsp"));
+    setTabTitle(TAB_TITLE);
     register();
 
     myAchievementsGrantor = achievementsGrantor;
@@ -33,7 +35,7 @@ public class MyAchievementsTab extends SimpleCustomTab {
   public String getTabTitle(@NotNull HttpServletRequest request) {
     final SUser user = SessionUser.getUser(request);
     List<Achievement> granted = myAchievementsGrantor.getGrantedAchievements(user);
-    return granted.isEmpty() ? "My Achievements" : "My Achievements (" + granted.size() + ")";
+    return TAB_TITLE + (granted.isEmpty() ? "" : " (" + granted.size() + ")");
   }
 
   @Override

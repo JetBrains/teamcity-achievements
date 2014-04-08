@@ -95,7 +95,7 @@ public class AchievementsConfig {
 
       @Nullable
       public String getIconClassNames() {
-        return null;
+        return "icon-frown";
       }
     });
   }
