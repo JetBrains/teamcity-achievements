@@ -1,6 +1,7 @@
 package org.jetbrains.buildserver.achievements.impl;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface Achievement {
   @NotNull
@@ -16,4 +17,7 @@ public interface Achievement {
   String getEvent();
 
   int getEventsCount();
+
+  @Nullable
+  String getIconClassNames();
 }

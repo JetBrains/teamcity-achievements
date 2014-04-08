@@ -27,6 +27,8 @@ class UserEventsImpl implements UserEvents {
     }
 
     eventLog.trimToSize();
+
+    System.out.println("New event: " + eventName + ", num events: " + eventLog.size());
   }
 
   public synchronized int getNumberOfEvents(@NotNull String eventName) {

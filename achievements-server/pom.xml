@@ -28,6 +28,7 @@
         <groupId>org.jetbrains.teamcity.idea</groupId>
         <artifactId>util</artifactId>
         <version>95.677</version>
+        <scope>provided</scope>
     </dependency>
 </dependencies>
 </project>

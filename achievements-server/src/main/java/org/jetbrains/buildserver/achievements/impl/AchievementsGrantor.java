@@ -8,7 +8,9 @@ import org.jetbrains.buildserver.achievements.UserEvents;
 import org.jetbrains.buildserver.achievements.UserEventsListener;
 import org.jetbrains.buildserver.achievements.UserEventsRegistry;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AchievementsGrantor implements UserEventsListener {
   private final AchievementsConfig myConfig;
@@ -41,6 +43,18 @@ public class AchievementsGrantor implements UserEventsListener {
   public void grantAchievement(@NotNull User user, @NotNull Achievement achievement) {
     SUser su = (SUser) user;
     su.setUserProperty(makePropertyKey(achievement), String.valueOf(new Date().getTime()));
+  }
+
+  @NotNull
+  public List<Achievement> getGrantedAchievements(@NotNull User user) {
+    List<Achievement> res = new ArrayList<Achievement>();
+    for (Achievement achievement: myConfig.getAchievements()) {
+      if (hasAchievement(user, achievement)) {
+        res.add(achievement);
+      }
+    }
+
+    return res;
   }
 
   @NotNull
