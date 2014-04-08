@@ -7,4 +7,5 @@
     <bean class="org.jetbrains.buildserver.achievements.impl.AchievementsGrantor"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.AchievementsLoaderPageExtension"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.GrantedAchievementsController"/>
+    <bean class="org.jetbrains.buildserver.achievements.controller.MyAchievementsTab"/>
 </beans>
