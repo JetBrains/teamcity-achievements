@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans default-autowire="constructor">
+    <bean class="org.jetbrains.buildserver.achievements.impl.AchievementsConfig"/>
+    <bean class="org.jetbrains.buildserver.achievements.impl.ServerEventsAdapter"/>
+    <bean class="org.jetbrains.buildserver.achievements.impl.UserEventsRegistryImpl"/>
+    <bean class="org.jetbrains.buildserver.achievements.impl.AchievementsGrantor"/>
 </beans>
