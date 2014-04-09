@@ -20,6 +20,7 @@ import org.jetbrains.buildserver.achievements.UserEventsListener;
 import org.jetbrains.buildserver.achievements.UserEventsRegistry;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ServerEventsAdapter extends BuildServerAdapter {
   private final UserEventsRegistry myUserEventsRegistry;
@@ -35,9 +36,7 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     super.buildUnpinned(build, user, comment);
 
     if (user != null) {
-      myUserEventsRegistry.getUserEvents(user).registerEvent(AchievementEvents.buildUnpinned.name());
-
-      notifyUserEventsPublished(user);
+      registerUserEvent(user, AchievementEvents.buildUnpinned.name());
     }
   }
 
@@ -51,10 +50,8 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     if (muteInfo.getAutoUnmuteOptions().getUnmuteByTime() == null) return;
 
     for (STest ignored : muteInfo.getTests()) {
-      myUserEventsRegistry.getUserEvents(user).registerEvent(AchievementEvents.testBombed.name());
+      registerUserEvent(user, AchievementEvents.testBombed.name());
     }
-
-    notifyUserEventsPublished(user);
   }
 
   @Override
@@ -70,10 +67,7 @@ public class ServerEventsAdapter extends BuildServerAdapter {
       if (problem instanceof BuildProblem) {
         BuildProblem bp = (BuildProblem) problem;
         if (BuildProblemTypes.TC_COMPILATION_ERROR_TYPE.equals(bp.getBuildProblemData().getType())) {
-          myUserEventsRegistry.getUserEvents(responsible).registerEvent(AchievementEvents.compilationBroken.name());
-
-          notifyUserEventsPublished(responsible);
-
+          registerUserEvent(responsible, AchievementEvents.compilationBroken.name());
           break;
         }
       }
@@ -102,10 +96,17 @@ public class ServerEventsAdapter extends BuildServerAdapter {
 
     if (!mod.getRelatedIssues().isEmpty()) {
       for (SUser committer: mod.getCommitters()) {
-        myUserEventsRegistry.getUserEvents(committer).registerEvent(AchievementEvents.bugFixed.name());
-
-        notifyUserEventsPublished(committer);
+        registerUserEvent(committer, AchievementEvents.bugFixed.name());
       }
+    }
+  }
+
+  @Override
+  public void buildTagsChanged(@NotNull SBuild build, User user, @NotNull List<String> oldTags, @NotNull List<String> newTags) {
+    super.buildTagsChanged(build, user, oldTags, newTags);
+
+    if (user != null && !newTags.isEmpty()) {
+      registerUserEvent(user, AchievementEvents.buildTagged.name());
     }
   }
 
@@ -113,16 +114,15 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     User responsible = entry.getResponsibleUser();
     User reporter = entry.getReporterUser();
     if (reporter != null && reporter.getId() != responsible.getId()) {
-      myUserEventsRegistry.getUserEvents(reporter).registerEvent(AchievementEvents.investigationAssigned.name());
-
-      notifyUserEventsPublished(reporter);
+      registerUserEvent(reporter, AchievementEvents.investigationAssigned.name());
       return true;
     }
 
     return false;
   }
 
-  private void notifyUserEventsPublished(User user) {
+  private void registerUserEvent(@NotNull User user, @NotNull String eventName) {
+    myUserEventsRegistry.getUserEvents(user).registerEvent(eventName);
     myEventDispatcher.getMulticaster().userEventsPublished(user);
   }
 
