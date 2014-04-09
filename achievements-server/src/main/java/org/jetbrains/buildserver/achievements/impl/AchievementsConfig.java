@@ -186,7 +186,7 @@ public class AchievementsConfig {
 
     @NotNull
     public String getEvent() {
-      return AchievementEvents.investigationAssigned.name();
+      return AchievementEvents.investigationDelegated.name();
     }
 
     public int getEventsCount() {
@@ -259,6 +259,37 @@ public class AchievementsConfig {
     @Nullable
     public String getIconClassNames() {
       return "icon-book";
+    }
+  },
+
+  new Achievement() {
+    @NotNull
+    public String getId() {
+      return "boyscout";
+    }
+
+    @NotNull
+    public String getName() {
+      return "Boy Scout";
+    }
+
+    @NotNull
+    public String getDescription() {
+      return "Granted for assigning several investigations for a test or problem to himself.";
+    }
+
+    @NotNull
+    public String getEvent() {
+      return AchievementEvents.investigationTaken.name();
+    }
+
+    public int getEventsCount() {
+      return 10;
+    }
+
+    @Nullable
+    public String getIconClassNames() {
+      return "icon-fire";
     }
   }
 

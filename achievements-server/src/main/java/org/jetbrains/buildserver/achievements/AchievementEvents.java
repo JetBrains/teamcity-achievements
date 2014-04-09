@@ -6,7 +6,8 @@ public enum AchievementEvents {
   testBombed,
   testDisarmed,
   compilationBroken,
-  investigationAssigned,
+  investigationDelegated,
+  investigationTaken,
   bugFixed,
   longCommentAdded
 }

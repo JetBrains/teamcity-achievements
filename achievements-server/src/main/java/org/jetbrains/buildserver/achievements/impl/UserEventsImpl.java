@@ -1,5 +1,6 @@
 package org.jetbrains.buildserver.achievements.impl;
 
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.util.Dates;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.buildserver.achievements.UserEvents;
@@ -7,6 +8,7 @@ import org.jetbrains.buildserver.achievements.UserEvents;
 import java.util.*;
 
 class UserEventsImpl implements UserEvents {
+  private final static Logger LOG = Logger.getInstance(UserEventsImpl.class.getName());
   private Map<String, ArrayList<Long>> myEventLog = new HashMap<String, ArrayList<Long>>(); // event name => list of timestamps when event happened
 
   public synchronized void registerEvent(@NotNull String eventName) {
@@ -28,7 +30,7 @@ class UserEventsImpl implements UserEvents {
 
     eventLog.trimToSize();
 
-    System.out.println("New event: " + eventName + ", num events: " + eventLog.size());
+    LOG.debug("New event registered: " + eventName + ", num events: " + eventLog.size());
   }
 
   public synchronized int getNumberOfEvents(@NotNull String eventName) {

@@ -1,6 +1,8 @@
 package org.jetbrains.buildserver.achievements.impl;
 
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.serverSide.SecurityContextEx;
+import jetbrains.buildServer.serverSide.impl.LogUtil;
 import jetbrains.buildServer.users.PluginPropertyKey;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.User;
@@ -16,13 +18,14 @@ import java.util.Date;
 import java.util.List;
 
 public class AchievementsGrantor implements UserEventsListener {
+  private final static Logger LOG = Logger.getInstance(AchievementsGrantor.class.getName());
+
   private final AchievementsConfig myConfig;
   private final UserEventsRegistry myEventsRegistry;
   private final UserModel myUserModel;
   private final SecurityContextEx mySecurityContext;
 
   public AchievementsGrantor(@NotNull AchievementsConfig config,
-                             @NotNull ServerEventsAdapter serverEventsAdapter,
                              @NotNull UserEventsRegistry userEventsRegistry,
                              @NotNull UserModel userModel,
                              @NotNull SecurityContextEx securityContext) {
@@ -30,7 +33,7 @@ public class AchievementsGrantor implements UserEventsListener {
     myEventsRegistry = userEventsRegistry;
     myUserModel = userModel;
     mySecurityContext = securityContext;
-    serverEventsAdapter.addListener(this);
+    userEventsRegistry.addListener(this);
   }
 
   public void userEventsPublished(@NotNull User user) {
@@ -54,6 +57,7 @@ public class AchievementsGrantor implements UserEventsListener {
   public void grantAchievement(@NotNull User user, @NotNull Achievement achievement) {
     SUser su = (SUser) user;
     su.setUserProperty(makePropertyKey(achievement), String.valueOf(new Date().getTime()));
+    LOG.info("User " + LogUtil.describe(user) + " has been granted achievement: " + achievement.getName());
   }
 
   @NotNull

@@ -16,7 +16,6 @@ import jetbrains.buildServer.vcs.VcsRoot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.buildserver.achievements.AchievementEvents;
-import org.jetbrains.buildserver.achievements.UserEventsListener;
 import org.jetbrains.buildserver.achievements.UserEventsRegistry;
 
 import java.util.Collection;
@@ -25,7 +24,6 @@ import java.util.Map;
 
 public class ServerEventsAdapter extends BuildServerAdapter {
   private final UserEventsRegistry myUserEventsRegistry;
-  private final EventDispatcher<UserEventsListener> myEventDispatcher = EventDispatcher.create(UserEventsListener.class);
 
   public ServerEventsAdapter(@NotNull UserEventsRegistry userEventsRegistry, @NotNull EventDispatcher<BuildServerListener> serverDispatcher) {
     myUserEventsRegistry = userEventsRegistry;
@@ -73,7 +71,8 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     super.responsibleChanged(project, buildProblems, entry);
 
     if (entry == null) return;
-    if (!notifyInvestigationAssigned(entry)) return;
+    if (notifyInvestigationTaken(entry)) return;
+    if (!notifyInvestigationDelegated(entry)) return;
 
     User responsible = entry.getResponsibleUser();
 
@@ -92,14 +91,16 @@ public class ServerEventsAdapter extends BuildServerAdapter {
   public void responsibleChanged(@NotNull SProject project, @NotNull Collection<TestName> testNames, @NotNull ResponsibilityEntry entry, boolean isUserAction) {
     super.responsibleChanged(project, testNames, entry, isUserAction);
 
-    notifyInvestigationAssigned(entry);
+    notifyInvestigationDelegated(entry);
+    notifyInvestigationTaken(entry);
   }
 
   @Override
   public void responsibleChanged(@NotNull SBuildType bt, @NotNull ResponsibilityEntry oldValue, @NotNull ResponsibilityEntry newValue) {
     super.responsibleChanged(bt, oldValue, newValue);
 
-    notifyInvestigationAssigned(newValue);
+    notifyInvestigationDelegated(newValue);
+    notifyInvestigationTaken(newValue);
   }
 
   @Override
@@ -130,11 +131,22 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     }
   }
 
-  private boolean notifyInvestigationAssigned(@NotNull ResponsibilityEntry entry) {
+  private boolean notifyInvestigationDelegated(@NotNull ResponsibilityEntry entry) {
     User responsible = entry.getResponsibleUser();
     User reporter = entry.getReporterUser();
     if (reporter != null && reporter.getId() != responsible.getId()) {
-      registerUserEvent(reporter, AchievementEvents.investigationAssigned.name());
+      registerUserEvent(reporter, AchievementEvents.investigationDelegated.name());
+      return true;
+    }
+
+    return false;
+  }
+
+  private boolean notifyInvestigationTaken(@NotNull ResponsibilityEntry entry) {
+    User responsible = entry.getResponsibleUser();
+    User reporter = entry.getReporterUser();
+    if (reporter != null && reporter.getId() == responsible.getId()) {
+      registerUserEvent(reporter, AchievementEvents.investigationTaken.name());
       return true;
     }
 
@@ -143,14 +155,5 @@ public class ServerEventsAdapter extends BuildServerAdapter {
 
   private void registerUserEvent(@NotNull User user, @NotNull String eventName) {
     myUserEventsRegistry.getUserEvents(user).registerEvent(eventName);
-    myEventDispatcher.getMulticaster().userEventsPublished(user);
-  }
-
-  public void addListener(@NotNull UserEventsListener listener) {
-    myEventDispatcher.addListener(listener);
-  }
-
-  public void removeListener(@NotNull UserEventsListener listener) {
-    myEventDispatcher.removeListener(listener);
   }
 }
