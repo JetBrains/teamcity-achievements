@@ -2,14 +2,16 @@
 <%@include file="/include.jsp"%>
 <jsp:useBean id="grantedAchievements" type="java.util.List" scope="request"/>
 <jsp:useBean id="availableAchievements" type="java.util.List" scope="request"/>
+<jsp:useBean id="allAchievementsMap" type="java.util.Map" scope="request"/>
 <p>You unlocked <strong>${fn:length(grantedAchievements)}</strong> achievement<bs:s val="${fn:length(grantedAchievements)}"/>.</p>
 
 <c:if test="${not empty grantedAchievements}">
-    <table>
+    <table class="achievementsTable">
         <c:forEach items="${grantedAchievements}" var="a">
             <tr>
-                <td style="width: 20%"><strong><c:if test="${not empty a.iconClassNames}"><i class="${a.iconClassNames}"></i></c:if> <c:out value="${a.name}"/></strong></td>
-                <td>- <c:out value='${a.description}'/></td>
+                <td class="achievementName"><strong><c:if test="${not empty a.iconClassNames}"><i class="${a.iconClassNames}"></i></c:if> <c:out value="${a.name}"/></strong></td>
+                <td class="description">- <c:out value='${a.description}'/></td>
+                <td>${allAchievementsMap[a]} awarded</td>
             </tr>
         </c:forEach>
     </table>
@@ -18,11 +20,12 @@
 <c:if test="${not empty availableAchievements}">
     <p><a href="#" onclick="BS.Util.show('availableAchievements'); BS.Util.hide(this); return false;">View available achievements &raquo;</a></p>
 
-    <table style="display:none" id="availableAchievements">
+    <table style="display:none" id="availableAchievements" class="achievementsTable">
         <c:forEach items="${availableAchievements}" var="a">
             <tr>
-                <td style="width: 20%"><strong><c:if test="${not empty a.iconClassNames}"><i class="${a.iconClassNames}"></i></c:if> <c:out value="${a.name}"/></strong></td>
-                <td>- <c:out value='${a.description}'/></td>
+                <td class="achievementName"><strong><c:if test="${not empty a.iconClassNames}"><i class="${a.iconClassNames}"></i></c:if> <c:out value="${a.name}"/></strong></td>
+                <td class="description">- <c:out value='${a.description}'/></td>
+                <td>${allAchievementsMap[a]} awarded</td>
             </tr>
         </c:forEach>
     </table>

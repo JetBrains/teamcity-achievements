@@ -1,6 +1,5 @@
 package org.jetbrains.buildserver.achievements.controller;
 
-import jetbrains.buildServer.serverSide.TeamCityProperties;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PlaceId;
@@ -13,9 +12,7 @@ import org.jetbrains.buildserver.achievements.impl.AchievementsConfig;
 import org.jetbrains.buildserver.achievements.impl.AchievementsGrantor;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MyAchievementsTab extends SimpleCustomTab {
   private static final String TAB_TITLE = "My Achievements";
@@ -49,13 +46,17 @@ public class MyAchievementsTab extends SimpleCustomTab {
 
     List<Achievement> granted = myAchievementsGrantor.getGrantedAchievements(user);
 
-    List<Achievement> allAchievements = new ArrayList<Achievement>();
-    if (TeamCityProperties.getBoolean("teamcity.development.mode")) {
-      allAchievements.addAll(myAchievementsConfig.getAchievements());
-      allAchievements.removeAll(granted);
+    List<Achievement> available = new ArrayList<Achievement>();
+    available.addAll(myAchievementsConfig.getAchievements());
+    available.removeAll(granted);
+
+    Map<Achievement, Integer> allAchievementsMap = new HashMap<Achievement, Integer>();
+    for (Achievement achievement : myAchievementsConfig.getAchievements()) {
+      allAchievementsMap.put(achievement, myAchievementsGrantor.getNumberOfUsersWithAchievement(achievement));
     }
 
     model.put("grantedAchievements", granted);
-    model.put("availableAchievements", allAchievements);
+    model.put("availableAchievements", available);
+    model.put("allAchievementsMap", allAchievementsMap);
   }
 }

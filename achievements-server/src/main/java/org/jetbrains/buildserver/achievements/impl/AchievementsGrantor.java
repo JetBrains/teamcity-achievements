@@ -1,8 +1,11 @@
 package org.jetbrains.buildserver.achievements.impl;
 
+import jetbrains.buildServer.serverSide.SecurityContextEx;
 import jetbrains.buildServer.users.PluginPropertyKey;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.User;
+import jetbrains.buildServer.users.UserModel;
+import jetbrains.buildServer.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.buildserver.achievements.UserEvents;
 import org.jetbrains.buildserver.achievements.UserEventsListener;
@@ -15,10 +18,18 @@ import java.util.List;
 public class AchievementsGrantor implements UserEventsListener {
   private final AchievementsConfig myConfig;
   private final UserEventsRegistry myEventsRegistry;
+  private final UserModel myUserModel;
+  private final SecurityContextEx mySecurityContext;
 
-  public AchievementsGrantor(@NotNull AchievementsConfig config, @NotNull ServerEventsAdapter serverEventsAdapter, @NotNull UserEventsRegistry userEventsRegistry) {
+  public AchievementsGrantor(@NotNull AchievementsConfig config,
+                             @NotNull ServerEventsAdapter serverEventsAdapter,
+                             @NotNull UserEventsRegistry userEventsRegistry,
+                             @NotNull UserModel userModel,
+                             @NotNull SecurityContextEx securityContext) {
     myConfig = config;
     myEventsRegistry = userEventsRegistry;
+    myUserModel = userModel;
+    mySecurityContext = securityContext;
     serverEventsAdapter.addListener(this);
   }
 
@@ -55,6 +66,25 @@ public class AchievementsGrantor implements UserEventsListener {
     }
 
     return res;
+  }
+
+  public int getNumberOfUsersWithAchievement(@NotNull final Achievement achievement) {
+    try {
+      return mySecurityContext.runAsSystem(new SecurityContextEx.RunAsActionWithResult<Integer>() {
+        public Integer run() throws Throwable {
+          int count = 0;
+          for (SUser user: myUserModel.getAllUsers().getUsers()) {
+            if (hasAchievement(user, achievement)) {
+              count++;
+            }
+          }
+          return count;
+        }
+      });
+    } catch (Throwable throwable) {
+      ExceptionUtil.rethrowAsRuntimeException(throwable);
+    }
+    return 0;
   }
 
   @NotNull
