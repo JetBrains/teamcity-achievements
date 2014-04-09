@@ -1,7 +1,9 @@
 package org.jetbrains.buildserver.achievements.impl;
 
+import jetbrains.buildServer.users.SUser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.buildserver.achievements.UserEvents;
 
 public interface Achievement {
   @NotNull
@@ -13,11 +15,8 @@ public interface Achievement {
   @NotNull
   String getDescription();
 
-  @NotNull
-  String getEvent();
-
-  int getEventsCount();
-
   @Nullable
   String getIconClassNames();
+
+  boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, Object additionalData);
 }

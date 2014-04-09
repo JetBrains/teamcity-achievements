@@ -9,6 +9,7 @@ import jetbrains.buildServer.users.User;
 import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.buildserver.achievements.UserEvents;
 import org.jetbrains.buildserver.achievements.UserEventsListener;
 import org.jetbrains.buildserver.achievements.UserEventsRegistry;
@@ -36,15 +37,12 @@ public class AchievementsGrantor implements UserEventsListener {
     userEventsRegistry.addListener(this);
   }
 
-  public void userEventsPublished(@NotNull User user) {
+  public void userEventsPublished(@NotNull User user, @Nullable Object additionalData) {
     UserEvents events = myEventsRegistry.getUserEvents(user);
     for (Achievement achievement: myConfig.getAchievements()) {
       if (hasAchievement(user, achievement)) continue;
 
-      String eventName = achievement.getEvent();
-      int eventsCount = achievement.getEventsCount();
-
-      if (events.getNumberOfEvents(eventName) >= eventsCount) {
+      if (achievement.shouldGrantAchievement((SUser) user, events, additionalData)) {
         grantAchievement(user, achievement);
       }
     }

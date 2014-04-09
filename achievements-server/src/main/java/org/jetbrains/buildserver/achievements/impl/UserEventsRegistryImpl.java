@@ -3,6 +3,7 @@ package org.jetbrains.buildserver.achievements.impl;
 import jetbrains.buildServer.users.User;
 import jetbrains.buildServer.util.EventDispatcher;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.buildserver.achievements.UserEvents;
 import org.jetbrains.buildserver.achievements.UserEventsListener;
 import org.jetbrains.buildserver.achievements.UserEventsRegistry;
@@ -22,7 +23,12 @@ public class UserEventsRegistryImpl implements UserEventsRegistry {
         @Override
         public synchronized void registerEvent(@NotNull String eventName) {
           super.registerEvent(eventName);
-          myEventDispatcher.getMulticaster().userEventsPublished(user);
+          myEventDispatcher.getMulticaster().userEventsPublished(user, null);
+        }
+
+        public void registerEvent(@NotNull String eventName, @Nullable Object additionalData) {
+          super.registerEvent(eventName);
+          myEventDispatcher.getMulticaster().userEventsPublished(user, additionalData);
         }
       };
       myUserEvents.put(user.getId(), userEvents);

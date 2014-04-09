@@ -3,6 +3,7 @@ package org.jetbrains.buildserver.achievements.impl;
 import jetbrains.buildServer.BuildProblemTypes;
 import jetbrains.buildServer.responsibility.ResponsibilityEntry;
 import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.serverSide.impl.auth.UserAuthEventDispatcher;
 import jetbrains.buildServer.serverSide.mute.MuteInfo;
 import jetbrains.buildServer.serverSide.problems.BuildProblem;
 import jetbrains.buildServer.serverSide.problems.BuildProblemInfo;
@@ -25,7 +26,9 @@ import java.util.Map;
 public class ServerEventsAdapter extends BuildServerAdapter {
   private final UserEventsRegistry myUserEventsRegistry;
 
-  public ServerEventsAdapter(@NotNull UserEventsRegistry userEventsRegistry, @NotNull EventDispatcher<BuildServerListener> serverDispatcher) {
+  public ServerEventsAdapter(@NotNull UserEventsRegistry userEventsRegistry,
+                             @NotNull EventDispatcher<BuildServerListener> serverDispatcher,
+                             @NotNull UserAuthEventDispatcher userAuthDispatcher) {
     myUserEventsRegistry = userEventsRegistry;
     serverDispatcher.addListener(this);
   }

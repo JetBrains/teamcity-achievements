@@ -1,14 +1,18 @@
 package org.jetbrains.buildserver.achievements.impl;
 
+import jetbrains.buildServer.users.SUser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.buildserver.achievements.AchievementEvents;
+import org.jetbrains.buildserver.achievements.UserEvents;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AchievementsConfig {
-  private final static List<Achievement> ALL_ACHIEVEMENTS = Arrays.asList(new Achievement() {
+  private final static List<Achievement> ALL_ACHIEVEMENTS = Arrays.<Achievement>asList(new SimpleAchievement(AchievementEvents.buildUnpinned.name(), 10) {
     @NotNull
     public String getId() {
       return "cleanupBooster";
@@ -24,15 +28,6 @@ public class AchievementsConfig {
       return "Granted for unpinning several builds in a row. This will help cleanup process to free more disk space on the server.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.buildUnpinned.name();
-    }
-
-    public int getEventsCount() {
-      return 10;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-trash";
@@ -40,7 +35,7 @@ public class AchievementsConfig {
   },
 
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.testBombed.name(), 20) {
     @NotNull
     public String getId() {
       return "saboteur";
@@ -56,15 +51,6 @@ public class AchievementsConfig {
       return "Granted for bombing (muting) several tests with automatic explosion (unmute) on a specific date.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.testBombed.name();
-    }
-
-    public int getEventsCount() {
-      return 20;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-male";
@@ -72,7 +58,7 @@ public class AchievementsConfig {
   },
 
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.testDisarmed.name(), 20) {
     @NotNull
     public String getId() {
       return "sapper";
@@ -88,15 +74,6 @@ public class AchievementsConfig {
       return "Granted for disarming (unmuting) several tests.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.testDisarmed.name();
-    }
-
-    public int getEventsCount() {
-      return 20;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-magnet";
@@ -104,7 +81,7 @@ public class AchievementsConfig {
   },
 
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.compilationBroken.name(), 3) {
     @NotNull
     public String getId() {
       return "codeCrusher";
@@ -120,15 +97,6 @@ public class AchievementsConfig {
       return "Granted if a person is assigned investigation for a series of broken compilations.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.compilationBroken.name();
-    }
-
-    public int getEventsCount() {
-      return 3;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-frown";
@@ -136,7 +104,7 @@ public class AchievementsConfig {
   },
 
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.bugFixed.name(), 10) {
     @NotNull
     public String getId() {
       return "debugger";
@@ -152,15 +120,6 @@ public class AchievementsConfig {
       return "Granted for a series of commits mentioning fixed bugs.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.bugFixed.name();
-    }
-
-    public int getEventsCount() {
-      return 10;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-bug";
@@ -168,7 +127,7 @@ public class AchievementsConfig {
   },
 
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.investigationDelegated.name(), 10) {
     @NotNull
     public String getId() {
       return "bigBrother";
@@ -184,15 +143,6 @@ public class AchievementsConfig {
       return "Granted for assigning investigations to several different persons.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.investigationDelegated.name();
-    }
-
-    public int getEventsCount() {
-      return 10;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-eye-open";
@@ -200,7 +150,7 @@ public class AchievementsConfig {
   },
 
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.buildTagged.name(), 20) {
     @NotNull
     public String getId() {
       return "taxonomist";
@@ -216,22 +166,13 @@ public class AchievementsConfig {
       return "Granted for tagging several builds in a row.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.buildTagged.name();
-    }
-
-    public int getEventsCount() {
-      return 20;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-tag";
     }
   },
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.longCommentAdded.name(), 1) {
     @NotNull
     public String getId() {
       return "novelist";
@@ -247,22 +188,13 @@ public class AchievementsConfig {
       return "Granted for extra long commit descriptions.";
     }
 
-    @NotNull
-    public String getEvent() {
-      return AchievementEvents.longCommentAdded.name();
-    }
-
-    public int getEventsCount() {
-      return 1;
-    }
-
     @Nullable
     public String getIconClassNames() {
       return "icon-book";
     }
   },
 
-  new Achievement() {
+  new SimpleAchievement(AchievementEvents.investigationTaken.name(), 10) {
     @NotNull
     public String getId() {
       return "boyscout";
@@ -278,18 +210,42 @@ public class AchievementsConfig {
       return "Granted for assigning several investigations for a test or problem to himself.";
     }
 
+    @Nullable
+    public String getIconClassNames() {
+      return "icon-fire";
+    }
+  },
+
+  new Achievement() {
     @NotNull
-    public String getEvent() {
-      return AchievementEvents.investigationTaken.name();
+    public String getId() {
+      return "earlyBird";
     }
 
-    public int getEventsCount() {
-      return 10;
+    @NotNull
+    public String getName() {
+      return "Early Bird";
+    }
+
+    @NotNull
+    public String getDescription() {
+      return "Granted for some early action on the build server.";
     }
 
     @Nullable
     public String getIconClassNames() {
-      return "icon-fire";
+      return "icon-time";
+    }
+
+    public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, Object additionalData) {
+      if (!(additionalData instanceof java.util.TimeZone)) return false;
+
+      long timestamp = events.getLastEventTime(AchievementEvents.userAction.name());
+      Calendar c = Calendar.getInstance();
+      c.setTimeZone((java.util.TimeZone) additionalData);
+      c.setTime(new Date(timestamp));
+
+      return  c.get(Calendar.HOUR_OF_DAY) < 8;
     }
   }
 

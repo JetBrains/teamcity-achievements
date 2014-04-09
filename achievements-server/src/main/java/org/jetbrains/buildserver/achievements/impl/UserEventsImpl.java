@@ -7,7 +7,7 @@ import org.jetbrains.buildserver.achievements.UserEvents;
 
 import java.util.*;
 
-class UserEventsImpl implements UserEvents {
+public abstract class UserEventsImpl implements UserEvents {
   private final static Logger LOG = Logger.getInstance(UserEventsImpl.class.getName());
   private Map<String, ArrayList<Long>> myEventLog = new HashMap<String, ArrayList<Long>>(); // event name => list of timestamps when event happened
 
@@ -31,6 +31,11 @@ class UserEventsImpl implements UserEvents {
     eventLog.trimToSize();
 
     LOG.debug("New event registered: " + eventName + ", num events: " + eventLog.size());
+  }
+
+  public synchronized long getLastEventTime(@NotNull String eventName) {
+    ArrayList<Long> eventLog = myEventLog.get(eventName);
+    return eventLog == null || eventLog.isEmpty() ? -1 : eventLog.get(eventLog.size()-1);
   }
 
   public synchronized int getNumberOfEvents(@NotNull String eventName) {
