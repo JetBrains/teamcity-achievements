@@ -75,6 +75,38 @@ public class AchievementsConfig {
   new Achievement() {
     @NotNull
     public String getId() {
+      return "sapper";
+    }
+
+    @NotNull
+    public String getName() {
+      return "Sapper";
+    }
+
+    @NotNull
+    public String getDescription() {
+      return "Granted for disarming (unmuting) several tests.";
+    }
+
+    @NotNull
+    public String getEvent() {
+      return AchievementEvents.testDisarmed.name();
+    }
+
+    public int getEventsCount() {
+      return 20;
+    }
+
+    @Nullable
+    public String getIconClassNames() {
+      return "icon-magnet";
+    }
+  },
+
+
+  new Achievement() {
+    @NotNull
+    public String getId() {
       return "codeCrusher";
     }
 
@@ -197,7 +229,40 @@ public class AchievementsConfig {
     public String getIconClassNames() {
       return "icon-tag";
     }
-  });
+  },
+
+  new Achievement() {
+    @NotNull
+    public String getId() {
+      return "novelist";
+    }
+
+    @NotNull
+    public String getName() {
+      return "Novelist";
+    }
+
+    @NotNull
+    public String getDescription() {
+      return "Granted for extra long commit descriptions.";
+    }
+
+    @NotNull
+    public String getEvent() {
+      return AchievementEvents.longCommentAdded.name();
+    }
+
+    public int getEventsCount() {
+      return 1;
+    }
+
+    @Nullable
+    public String getIconClassNames() {
+      return "icon-book";
+    }
+  }
+
+  );
 
   @NotNull
   public List<Achievement> getAchievements() {

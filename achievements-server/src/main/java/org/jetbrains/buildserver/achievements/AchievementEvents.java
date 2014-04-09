@@ -4,7 +4,9 @@ public enum AchievementEvents {
   buildUnpinned,
   buildTagged,
   testBombed,
+  testDisarmed,
   compilationBroken,
   investigationAssigned,
-  bugFixed
+  bugFixed,
+  longCommentAdded
 }

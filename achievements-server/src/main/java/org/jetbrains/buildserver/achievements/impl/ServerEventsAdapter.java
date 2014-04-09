@@ -21,6 +21,7 @@ import org.jetbrains.buildserver.achievements.UserEventsRegistry;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class ServerEventsAdapter extends BuildServerAdapter {
   private final UserEventsRegistry myUserEventsRegistry;
@@ -51,6 +52,19 @@ public class ServerEventsAdapter extends BuildServerAdapter {
 
     for (STest ignored : muteInfo.getTests()) {
       registerUserEvent(user, AchievementEvents.testBombed.name());
+    }
+  }
+
+  @Override
+  public void testsUnmuted(@Nullable SUser user, @NotNull Map<MuteInfo, Collection<STest>> unmutedGroups) {
+    super.testsUnmuted(user, unmutedGroups);
+
+    if (user == null) return;
+
+    for (MuteInfo mi: unmutedGroups.keySet()) {
+      for (STest ignored : unmutedGroups.get(mi)) {
+        registerUserEvent(user, AchievementEvents.testDisarmed.name());
+      }
     }
   }
 
@@ -97,6 +111,12 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     if (!mod.getRelatedIssues().isEmpty()) {
       for (SUser committer: mod.getCommitters()) {
         registerUserEvent(committer, AchievementEvents.bugFixed.name());
+      }
+    }
+
+    if (mod.getDescription().length() > 300) {
+      for (SUser committer: mod.getCommitters()) {
+        registerUserEvent(committer, AchievementEvents.longCommentAdded.name());
       }
     }
   }
