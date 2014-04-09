@@ -2,3 +2,11 @@ a.hideAchievement {
     float: right;
 }
 
+div.achievement {
+  background: #ffc no-repeat 5px 7px;
+  background-size: 16px 16px;
+  margin-bottom: 5px;
+  padding: 10px 10px 10px 15px;
+  border: 1px solid #ff8c00;
+  color: #222;
+}
