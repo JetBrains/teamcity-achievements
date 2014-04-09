@@ -39,7 +39,10 @@ public class AchievementsConfig {
       public String getIconClassNames() {
         return "icon-trash";
       }
-    }, new Achievement() {
+    },
+
+
+    new Achievement() {
       @NotNull
       public String getId() {
         return "saboteur";
@@ -66,9 +69,12 @@ public class AchievementsConfig {
 
       @Nullable
       public String getIconClassNames() {
-        return null;
+        return "icon-male";
       }
-    }, new Achievement() {
+    },
+
+
+    new Achievement() {
       @NotNull
       public String getId() {
         return "codeCrusher";
@@ -81,7 +87,7 @@ public class AchievementsConfig {
 
       @NotNull
       public String getDescription() {
-        return "Achievement is assigned for broken compilation.";
+        return "Achievement is assigned for a series of broken compilations.";
       }
 
       @NotNull
@@ -90,12 +96,76 @@ public class AchievementsConfig {
       }
 
       public int getEventsCount() {
-        return 1;
+        return 3;
       }
 
       @Nullable
       public String getIconClassNames() {
         return "icon-frown";
+      }
+    },
+
+
+    new Achievement() {
+      @NotNull
+      public String getId() {
+        return "debugger";
+      }
+
+      @NotNull
+      public String getName() {
+        return "Debugger";
+      }
+
+      @NotNull
+      public String getDescription() {
+        return "Achievement is assigned for a series of commits mentioning fixed bugs during the short period of time.";
+      }
+
+      @NotNull
+      public String getEvent() {
+        return AchievementEvents.bugFixed.name();
+      }
+
+      public int getEventsCount() {
+        return 10;
+      }
+
+      @Nullable
+      public String getIconClassNames() {
+        return "icon-bug";
+      }
+    },
+
+
+    new Achievement() {
+      @NotNull
+      public String getId() {
+        return "bigBrother";
+      }
+
+      @NotNull
+      public String getName() {
+        return "Big Brother";
+      }
+
+      @NotNull
+      public String getDescription() {
+        return "Achievement is granted for assigning investigations to several different persons.";
+      }
+
+      @NotNull
+      public String getEvent() {
+        return AchievementEvents.investigationAssigned.name();
+      }
+
+      public int getEventsCount() {
+        return 10;
+      }
+
+      @Nullable
+      public String getIconClassNames() {
+        return "icon-eye-open";
       }
     });
   }

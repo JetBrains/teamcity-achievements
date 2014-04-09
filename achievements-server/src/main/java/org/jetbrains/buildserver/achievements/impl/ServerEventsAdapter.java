@@ -6,8 +6,13 @@ import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.serverSide.mute.MuteInfo;
 import jetbrains.buildServer.serverSide.problems.BuildProblem;
 import jetbrains.buildServer.serverSide.problems.BuildProblemInfo;
+import jetbrains.buildServer.tests.TestName;
+import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.User;
 import jetbrains.buildServer.util.EventDispatcher;
+import jetbrains.buildServer.vcs.SVcsModification;
+import jetbrains.buildServer.vcs.VcsModification;
+import jetbrains.buildServer.vcs.VcsRoot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.buildserver.achievements.AchievementEvents;
@@ -52,15 +57,13 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     notifyUserEventsPublished(user);
   }
 
-  private void notifyUserEventsPublished(User user) {
-    myEventDispatcher.getMulticaster().userEventsPublished(user);
-  }
-
   @Override
   public void responsibleChanged(@NotNull SProject project, @NotNull Collection<BuildProblemInfo> buildProblems, @Nullable ResponsibilityEntry entry) {
     super.responsibleChanged(project, buildProblems, entry);
 
     if (entry == null) return;
+    if (!notifyInvestigationAssigned(entry)) return;
+
     User responsible = entry.getResponsibleUser();
 
     for (BuildProblemInfo problem: buildProblems) {
@@ -75,6 +78,52 @@ public class ServerEventsAdapter extends BuildServerAdapter {
         }
       }
     }
+  }
+
+  @Override
+  public void responsibleChanged(@NotNull SProject project, @NotNull Collection<TestName> testNames, @NotNull ResponsibilityEntry entry, boolean isUserAction) {
+    super.responsibleChanged(project, testNames, entry, isUserAction);
+
+    notifyInvestigationAssigned(entry);
+  }
+
+  @Override
+  public void responsibleChanged(@NotNull SBuildType bt, @NotNull ResponsibilityEntry oldValue, @NotNull ResponsibilityEntry newValue) {
+    super.responsibleChanged(bt, oldValue, newValue);
+
+    notifyInvestigationAssigned(newValue);
+  }
+
+  @Override
+  public void changeAdded(@NotNull VcsModification modification, @NotNull VcsRoot root, @Nullable Collection<SBuildType> buildTypes) {
+    super.changeAdded(modification, root, buildTypes);
+
+    SVcsModification mod = (SVcsModification) modification;
+
+    if (!mod.getRelatedIssues().isEmpty()) {
+      for (SUser committer: mod.getCommitters()) {
+        myUserEventsRegistry.getUserEvents(committer).registerEvent(AchievementEvents.bugFixed.name());
+
+        notifyUserEventsPublished(committer);
+      }
+    }
+  }
+
+  private boolean notifyInvestigationAssigned(@NotNull ResponsibilityEntry entry) {
+    User responsible = entry.getResponsibleUser();
+    User reporter = entry.getReporterUser();
+    if (reporter != null && reporter.getId() != responsible.getId()) {
+      myUserEventsRegistry.getUserEvents(reporter).registerEvent(AchievementEvents.investigationAssigned.name());
+
+      notifyUserEventsPublished(reporter);
+      return true;
+    }
+
+    return false;
+  }
+
+  private void notifyUserEventsPublished(User user) {
+    myEventDispatcher.getMulticaster().userEventsPublished(user);
   }
 
   public void addListener(@NotNull UserEventsListener listener) {

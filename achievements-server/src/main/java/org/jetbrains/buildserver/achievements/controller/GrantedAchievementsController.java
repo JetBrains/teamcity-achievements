@@ -1,9 +1,7 @@
 package org.jetbrains.buildserver.achievements.controller;
 
 import jetbrains.buildServer.controllers.BaseController;
-import jetbrains.buildServer.users.PluginPropertyKey;
 import jetbrains.buildServer.users.SUser;
-import jetbrains.buildServer.users.User;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import jetbrains.buildServer.web.util.SessionUser;
@@ -45,14 +43,5 @@ public class GrantedAchievementsController extends BaseController {
     ModelAndView mv = new ModelAndView(myPluginDescriptor.getPluginResourcesPath("/grantedAchievements.jsp"));
     mv.getModel().put("achievements", beans);
     return mv;
-  }
-
-  private boolean isHidden(@NotNull User user, @NotNull Achievement achievement) {
-    return user.getBooleanProperty(makePropertyKey(achievement));
-  }
-
-  @NotNull
-  private PluginPropertyKey makePropertyKey(@NotNull Achievement achievement) {
-    return new PluginPropertyKey("achievements", "achievements", "achievement.hidden." + achievement.getId());
   }
 }

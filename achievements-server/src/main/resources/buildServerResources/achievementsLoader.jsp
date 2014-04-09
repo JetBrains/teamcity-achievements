@@ -7,6 +7,6 @@
     });
 
     $('grantedAchievements').refresh = function() {
-        updater.onTimerEvent();
+        BS.ajaxUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html");
     }
 </script>
