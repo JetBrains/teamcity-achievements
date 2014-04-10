@@ -1,6 +1,7 @@
 package org.jetbrains.buildserver.achievements.impl;
 
 import jetbrains.buildServer.BuildProblemTypes;
+import jetbrains.buildServer.issueTracker.Issue;
 import jetbrains.buildServer.responsibility.ResponsibilityEntry;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.serverSide.impl.auth.UserAuthEventDispatcher;
@@ -112,9 +113,9 @@ public class ServerEventsAdapter extends BuildServerAdapter {
 
     SVcsModification mod = (SVcsModification) modification;
 
-    if (!mod.getRelatedIssues().isEmpty()) {
+    for (Issue ignored: mod.getRelatedIssues()) {
       for (SUser committer: mod.getCommitters()) {
-        registerUserEvent(committer, AchievementEvents.bugFixed.name());
+        registerUserEvent(committer, AchievementEvents.issueMentioned.name());
       }
     }
 

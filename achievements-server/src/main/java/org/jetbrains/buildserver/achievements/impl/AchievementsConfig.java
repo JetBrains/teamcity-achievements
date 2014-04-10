@@ -104,7 +104,7 @@ public class AchievementsConfig {
   },
 
 
-  new SimpleAchievement(AchievementEvents.bugFixed.name(), 10) {
+  new SimpleAchievement(AchievementEvents.issueMentioned.name(), 10) {
     @NotNull
     public String getId() {
       return "debugger";
@@ -150,7 +150,7 @@ public class AchievementsConfig {
   },
 
 
-  new SimpleAchievement(AchievementEvents.buildTagged.name(), 20) {
+  new SimpleAchievement(AchievementEvents.buildTagged.name(), 10) {
     @NotNull
     public String getId() {
       return "taxonomist";

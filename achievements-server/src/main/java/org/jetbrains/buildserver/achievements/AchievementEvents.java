@@ -8,7 +8,7 @@ public enum AchievementEvents {
   compilationBroken,
   investigationDelegated,
   investigationTaken,
-  bugFixed,
+  issueMentioned,
   longCommentAdded,
   userAction // with 10 minutes resolution
 }
