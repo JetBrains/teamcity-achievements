@@ -89,7 +89,7 @@ public class AchievementsConfig {
 
     @NotNull
     public String getName() {
-      return "Code Crusher";
+      return "Crusher";
     }
 
     @NotNull
