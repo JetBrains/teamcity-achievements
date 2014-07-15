@@ -27,13 +27,13 @@ Available achievements
 Available achievements can be seen on "My Achievements" tab on user profile page. At the moment the following achievements are available:
 
 Cleanup Booster - Granted for unpinning several builds in a row. This will help cleanup process to free more disk space on the server.
-Saboteur 	    - Granted for bombing (muting) several tests with automatic explosion (unmute) on a specific date.
+Saboteur 	      - Granted for bombing (muting) several tests with automatic explosion (unmute) on a specific date.
 Sapper 	        - Granted for disarming (unmuting) several tests.
-Crusher 	    - Granted if a person is assigned investigation for a series of broken compilations.
-Debugger 	    - Granted for a series of commits mentioning fixed bugs.
-Big Brother 	- Granted for assigning investigations to several different persons.
+Crusher 	      - Granted if a person is assigned investigation for a series of broken compilations.
+Debugger 	      - Granted for a series of commits mentioning fixed bugs.
+Big Brother 	  - Granted for assigning investigations to several different persons.
 Taxonomist 	    - Granted for tagging several builds in a row.
-Novelist 	    - Granted for extra long commit descriptions.
+Novelist 	      - Granted for extra long commit descriptions.
 Boy Scout 	    - Granted for assigning several investigations for a test or problem to himself.
 Early Bird 	    - Granted for some early action on the build server.
 
