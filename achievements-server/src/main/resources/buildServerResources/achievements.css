@@ -3,12 +3,12 @@ a.hideAchievement {
 }
 
 div.achievement {
-  background: #ffc no-repeat 5px 7px;
-  background-size: 16px 16px;
-  margin-bottom: 5px;
-  padding: 10px 10px 10px 15px;
-  border: 1px solid #ff8c00;
-  color: #222;
+    background: #ffc no-repeat 5px 7px;
+    background-size: 16px 16px;
+    margin-bottom: 5px;
+    padding: 10px 10px 10px 15px;
+    border: 1px solid #ff8c00;
+    color: #222;
 }
 
 table.achievementsTable {
@@ -25,4 +25,14 @@ table.achievementsTable td.achievementName {
 
 table.achievementsTable td.description {
     width: 65%;
+}
+
+#myachievements {
+    text-decoration: none;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#myachievements i {
+    padding: 0 2px 0 2px;
 }

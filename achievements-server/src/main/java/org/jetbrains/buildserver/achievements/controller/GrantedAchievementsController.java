@@ -47,15 +47,15 @@ public class GrantedAchievementsController extends BaseController {
 
     List<Achievement> granted = myAchievementsGrantor.getGrantedAchievements(user);
 
-    List<AchievementBean> beans = new ArrayList<AchievementBean>();
+    List<AchievementBean> newAchievements = new ArrayList<AchievementBean>();
     for (Achievement a: granted) {
       AchievementBean ab = new AchievementBean(a);
       if (ab.isHidden(user)) continue;
-      beans.add(ab);
+      newAchievements.add(ab);
     }
 
     ModelAndView mv = new ModelAndView(myPluginDescriptor.getPluginResourcesPath("/grantedAchievements.jsp"));
-    mv.getModel().put("achievements", beans);
+    mv.getModel().put("newAchievements", newAchievements);
     return mv;
   }
 

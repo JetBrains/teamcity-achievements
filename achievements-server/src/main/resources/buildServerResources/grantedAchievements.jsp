@@ -1,8 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/include.jsp"%>
-<jsp:useBean id="achievements" type="java.util.List" scope="request"/>
-<c:if test="${not empty achievements}">
-    <c:forEach items="${achievements}" var="ab">
+<jsp:useBean id="newAchievements" type="java.util.List" scope="request"/>
+<c:if test="${not empty newAchievements}">
+    <c:forEach items="${newAchievements}" var="ab">
         <c:set var="a" value="${ab.achievement}"/>
         <div class="achievement">
             <a href="#" onclick="BS.Util.show('hideProgress'); BS.User.setBooleanProperty('${ab.hidePropertyKey}', true, { afterComplete: function() { $('grantedAchievements').refresh(); } }); return false;" class="hideAchievement">Hide <forms:progressRing id="hideProgress" style="display: none; margin-left: 0.5em; float: none;"/></a>
