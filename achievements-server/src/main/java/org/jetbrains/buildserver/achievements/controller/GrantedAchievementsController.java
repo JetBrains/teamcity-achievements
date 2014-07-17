@@ -43,7 +43,10 @@ public class GrantedAchievementsController extends BaseController {
     final SUser user = SessionUser.getUser(request);
     if (user == null) return simpleView("User not found");
 
-    reportUserAction(user, request);
+    if (request.getParameter("userAction") != null) {
+      reportUserAction(user, request);
+      return null;
+    }
 
     List<Achievement> granted = myAchievementsGrantor.getGrantedAchievements(user);
 

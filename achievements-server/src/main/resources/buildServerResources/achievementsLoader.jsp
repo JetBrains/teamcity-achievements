@@ -5,13 +5,17 @@
 
 <script type="text/javascript">
     var updater = new BS.PeriodicalUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", {
-        frequency: 10,
+        frequency: 30,
         evalScripts: true
     });
 
     $('grantedAchievements').refresh = function() {
         BS.ajaxUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html");
-    }
+    };
+
+    $j('#bodyWrapper').on("click", function() {
+        BS.ajaxRequest(window['base_uri'] + "/grantedAchievements.html?userAction=true");
+    });
 </script>
 
 <c:if test="${not empty myAchievements}">
