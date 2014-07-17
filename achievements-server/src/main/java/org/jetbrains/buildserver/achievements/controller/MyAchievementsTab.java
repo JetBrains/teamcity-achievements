@@ -50,13 +50,8 @@ public class MyAchievementsTab extends SimpleCustomTab {
     available.addAll(myAchievementsConfig.getAchievements());
     available.removeAll(granted);
 
-    Map<Achievement, Integer> allAchievementsMap = new HashMap<Achievement, Integer>();
-    for (Achievement achievement : myAchievementsConfig.getAchievements()) {
-      allAchievementsMap.put(achievement, myAchievementsGrantor.getNumberOfUsersWithAchievement(achievement));
-    }
-
     model.put("grantedAchievements", granted);
     model.put("availableAchievements", available);
-    model.put("allAchievementsMap", allAchievementsMap);
+    model.put("allAchievementsMap", myAchievementsGrantor.getAchievementUsersMap());
   }
 }

@@ -14,9 +14,7 @@ import org.jetbrains.buildserver.achievements.UserEvents;
 import org.jetbrains.buildserver.achievements.UserEventsListener;
 import org.jetbrains.buildserver.achievements.UserEventsRegistry;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class AchievementsGrantor implements UserEventsListener {
   private final static Logger LOG = Logger.getInstance(AchievementsGrantor.class.getName());
@@ -70,23 +68,32 @@ public class AchievementsGrantor implements UserEventsListener {
     return res;
   }
 
-  public int getNumberOfUsersWithAchievement(@NotNull final Achievement achievement) {
+  @NotNull
+  public Map<Achievement, List<SUser>> getAchievementUsersMap() {
     try {
-      return mySecurityContext.runAsSystem(new SecurityContextEx.RunAsActionWithResult<Integer>() {
-        public Integer run() throws Throwable {
-          int count = 0;
+      return mySecurityContext.runAsSystem(new SecurityContextEx.RunAsActionWithResult<Map<Achievement, List<SUser>>>() {
+        public Map<Achievement, List<SUser>> run() throws Throwable {
+          Map<Achievement, List<SUser>> res = new HashMap<Achievement, List<SUser>>();
           for (SUser user: myUserModel.getAllUsers().getUsers()) {
-            if (hasAchievement(user, achievement)) {
-              count++;
+            for (Achievement achievement: myConfig.getAchievements()) {
+              List<SUser> users = res.get(achievement);
+              if (users == null) {
+                users = new ArrayList<SUser>();
+                res.put(achievement, users);
+              }
+              if (hasAchievement(user, achievement)) {
+                users.add(user);
+              }
             }
+
           }
-          return count;
+          return res;
         }
       });
     } catch (Throwable throwable) {
       ExceptionUtil.rethrowAsRuntimeException(throwable);
     }
-    return 0;
+    return Collections.emptyMap();
   }
 
   @NotNull
