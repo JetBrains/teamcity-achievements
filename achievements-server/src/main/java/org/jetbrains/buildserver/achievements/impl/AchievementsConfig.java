@@ -245,7 +245,8 @@ public class AchievementsConfig {
       c.setTimeZone((java.util.TimeZone) additionalData);
       c.setTime(new Date(timestamp));
 
-      return  c.get(Calendar.HOUR_OF_DAY) < 8;
+      int hour = c.get(Calendar.HOUR_OF_DAY);
+      return hour < 8 && hour >= 5;
     }
   }
 
