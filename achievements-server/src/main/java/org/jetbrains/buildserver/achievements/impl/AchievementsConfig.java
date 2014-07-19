@@ -1,6 +1,7 @@
 package org.jetbrains.buildserver.achievements.impl;
 
 import jetbrains.buildServer.users.SUser;
+import jetbrains.buildServer.vcs.SVcsModification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.buildserver.achievements.AchievementEvents;
@@ -169,7 +170,7 @@ public class AchievementsConfig {
     }
   },
 
-  new SimpleAchievement(AchievementEvents.longCommentAdded.name(), 1) {
+  new Achievement() {
     @NotNull
     public String getId() {
       return "novelist";
@@ -188,6 +189,13 @@ public class AchievementsConfig {
     @Nullable
     public String getIconClassNames() {
       return "icon-book";
+    }
+
+    public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, @NotNull String lastEventName, Object additionalData) {
+      if (!lastEventName.equals(AchievementEvents.changeAdded.name())) return false;
+      if (!(additionalData instanceof SVcsModification)) return false;
+      SVcsModification mod = (SVcsModification) additionalData;
+      return mod.getDescription().length() > 3000;
     }
   },
 
@@ -234,11 +242,11 @@ public class AchievementsConfig {
       return "icon-twitter";
     }
 
-    public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, Object additionalData) {
-      if (!(additionalData instanceof java.util.TimeZone)) return false;
+    public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, @NotNull String lastEventName, Object additionalData) {
+      return lastEventName.equals(AchievementEvents.userAction.name()) &&
+          additionalData instanceof TimeZone &&
+          checkUserActionsMadeBetween(events, (TimeZone) additionalData, 5, 8);
 
-      int hour = getLastEventHour(events, (TimeZone) additionalData);
-      return hour <= 8 && hour >= 5;
     }
   },
 
@@ -263,26 +271,66 @@ public class AchievementsConfig {
       return "icon-time";
     }
 
-    public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, Object additionalData) {
-      if (!(additionalData instanceof java.util.TimeZone)) return false;
+    public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, @NotNull String lastEventName, Object additionalData) {
+      return lastEventName.equals(AchievementEvents.userAction.name()) &&
+          additionalData instanceof TimeZone &&
+          checkUserActionsMadeBetween(events, (TimeZone) additionalData, 1, 4);
+    }
+  },
 
-      int hour = getLastEventHour(events, (TimeZone) additionalData);
-      return hour >= 1 && hour <= 4;
+  new SimpleAchievement(AchievementEvents.changeAdded.name(), 20) {
+    @NotNull
+    public String getId() {
+      return "productivityBoost";
+    }
+
+    @NotNull
+    public String getName() {
+      return "Productivity Boost";
+    }
+
+    @NotNull
+    public String getDescription() {
+      return "Granted for making a lot of commits during the day.";
+    }
+
+    @Nullable
+    public String getIconClassNames() {
+      return "icon-thumbs-up";
     }
   }
 
   );
 
-  private static int getLastEventHour(@NotNull UserEvents events, @NotNull TimeZone additionalData) {
-    long timestamp = events.getLastEventTime(AchievementEvents.userAction.name());
-    Calendar c = Calendar.getInstance();
-    c.setTimeZone(additionalData);
-    c.setTime(new Date(timestamp));
-    return c.get(Calendar.HOUR_OF_DAY);
+  private static boolean checkUserActionsMadeBetween(@NotNull UserEvents events, @NotNull TimeZone userTimeZone, int minHour, int maxHour) {
+    int numEvents = 3;
+    List<Long> times = events.getEventTimes(AchievementEvents.userAction.name());
+    if (times.size() < numEvents) return false;
+
+    for (int i=0; i<numEvents; i++) {
+      long timestamp = times.get(i);
+
+      Calendar c = Calendar.getInstance();
+      c.setTimeZone(userTimeZone);
+      c.setTime(new Date(timestamp));
+      int hour = c.get(Calendar.HOUR_OF_DAY);
+      if (hour < minHour || hour > maxHour) return false;
+    }
+
+    return true;
   }
 
   @NotNull
   public List<Achievement> getAchievements() {
     return ALL_ACHIEVEMENTS;
+  }
+
+  @NotNull
+  public Map<String, Achievement> getAchievementsMap() {
+    Map<String, Achievement> res = new HashMap<String, Achievement>();
+    for (Achievement a: ALL_ACHIEVEMENTS) {
+      res.put(a.getId(), a);
+    }
+    return res;
   }
 }

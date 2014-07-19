@@ -18,5 +18,5 @@ public interface Achievement {
   @Nullable
   String getIconClassNames();
 
-  boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, Object additionalData);
+  boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, @NotNull String lastEventName, @Nullable Object lastEventAdditionalData);
 }

@@ -4,7 +4,6 @@ import jetbrains.buildServer.BuildProblemTypes;
 import jetbrains.buildServer.issueTracker.Issue;
 import jetbrains.buildServer.responsibility.ResponsibilityEntry;
 import jetbrains.buildServer.serverSide.*;
-import jetbrains.buildServer.serverSide.impl.auth.UserAuthEventDispatcher;
 import jetbrains.buildServer.serverSide.mute.MuteInfo;
 import jetbrains.buildServer.serverSide.problems.BuildProblem;
 import jetbrains.buildServer.serverSide.problems.BuildProblemInfo;
@@ -28,8 +27,7 @@ public class ServerEventsAdapter extends BuildServerAdapter {
   private final UserEventsRegistry myUserEventsRegistry;
 
   public ServerEventsAdapter(@NotNull UserEventsRegistry userEventsRegistry,
-                             @NotNull EventDispatcher<BuildServerListener> serverDispatcher,
-                             @NotNull UserAuthEventDispatcher userAuthDispatcher) {
+                             @NotNull EventDispatcher<BuildServerListener> serverDispatcher) {
     myUserEventsRegistry = userEventsRegistry;
     serverDispatcher.addListener(this);
   }
@@ -119,10 +117,8 @@ public class ServerEventsAdapter extends BuildServerAdapter {
       }
     }
 
-    if (mod.getDescription().length() > 300) {
-      for (SUser committer: mod.getCommitters()) {
-        registerUserEvent(committer, AchievementEvents.longCommentAdded.name());
-      }
+    for (SUser committer: mod.getCommitters()) {
+      registerUserEvent(committer, AchievementEvents.changeAdded.name(), mod);
     }
   }
 
@@ -159,5 +155,9 @@ public class ServerEventsAdapter extends BuildServerAdapter {
 
   private void registerUserEvent(@NotNull User user, @NotNull String eventName) {
     myUserEventsRegistry.getUserEvents(user).registerEvent(eventName);
+  }
+
+  private void registerUserEvent(@NotNull User user, @NotNull String eventName, @NotNull Object additionalData) {
+    myUserEventsRegistry.getUserEvents(user).registerEvent(eventName, additionalData);
   }
 }

@@ -9,6 +9,6 @@ public enum AchievementEvents {
   investigationDelegated,
   investigationTaken,
   issueMentioned,
-  longCommentAdded,
-  userAction // with 10 minutes resolution
+  changeAdded,
+  userAction // with 5 minutes resolution
 }

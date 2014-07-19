@@ -8,21 +8,13 @@ import org.jmock.Mock;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Date;
+import java.util.List;
+
 @Test
-public class UserEventsRegistryImplTest extends BaseTestCase {
-  private UserEventsRegistryImpl myRegistry;
-
-  @BeforeMethod
-  protected void setUp() throws Exception {
-    super.setUp();
-    myRegistry = new UserEventsRegistryImpl();
-  }
-
+public class UserEventsRegistryImplTest extends AchievementsTestCase {
   public void test_register_event() {
-    Mock userMock = mock(SUser.class);
-    userMock.stubs().method("getId").will(returnValue(1L));
-
-    UserEvents userEvents = myRegistry.getUserEvents((SUser) userMock.proxy());
+    UserEvents userEvents = getUserEvents(createUser());
     userEvents.registerEvent("event1");
     assertEquals(1, userEvents.getNumberOfEvents("event1"));
 
@@ -33,5 +25,24 @@ public class UserEventsRegistryImplTest extends BaseTestCase {
     assertEquals(2, userEvents.getNumberOfEvents("event1"));
 
     assertTrue(userEvents.getEventsRate("event1", 1) > 1.5);
+  }
+
+  public void test_event_times() throws InterruptedException {
+    UserEvents userEvents = getUserEvents(createUser());
+    setTime(new Date().getTime() + 20);
+    userEvents.registerEvent("event1");
+
+    setTime(new Date().getTime() + 40);
+    userEvents.registerEvent("event1");
+
+    setTime(new Date().getTime() + 60);
+    userEvents.registerEvent("event1");
+
+    assertEquals(3, userEvents.getNumberOfEvents("event1"));
+
+    List<Long> times = userEvents.getEventTimes("event1");
+    assertEquals(3, times.size());
+
+    assertTrue(times.toString(), times.get(0) > times.get(1) && times.get(1) > times.get(2));
   }
 }

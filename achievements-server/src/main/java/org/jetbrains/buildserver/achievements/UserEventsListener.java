@@ -7,5 +7,5 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EventListener;
 
 public interface UserEventsListener extends EventListener {
-  void userEventsPublished(@NotNull User user, @Nullable Object additionalData);
+  void userEventPublished(@NotNull User user, @NotNull String eventName, @Nullable Object additionalData);
 }

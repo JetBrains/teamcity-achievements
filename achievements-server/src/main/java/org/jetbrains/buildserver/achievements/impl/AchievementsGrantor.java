@@ -35,12 +35,12 @@ public class AchievementsGrantor implements UserEventsListener {
     userEventsRegistry.addListener(this);
   }
 
-  public void userEventsPublished(@NotNull User user, @Nullable Object additionalData) {
+  public void userEventPublished(@NotNull User user, @NotNull String eventName, @Nullable Object additionalData) {
     UserEvents events = myEventsRegistry.getUserEvents(user);
     for (Achievement achievement: myConfig.getAchievements()) {
       if (hasAchievement(user, achievement)) continue;
 
-      if (achievement.shouldGrantAchievement((SUser) user, events, additionalData)) {
+      if (achievement.shouldGrantAchievement((SUser) user, events, eventName, additionalData)) {
         grantAchievement(user, achievement);
       }
     }

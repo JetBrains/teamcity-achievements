@@ -65,7 +65,7 @@ public class GrantedAchievementsController extends BaseController {
   private void reportUserAction(@NotNull SUser user, @NotNull HttpServletRequest request) {
     UserEvents events = myUserEventsRegistry.getUserEvents(user);
     long lastEventTime = events.getLastEventTime(AchievementEvents.userAction.name());
-    if (lastEventTime == -1 || new Date().getTime() - lastEventTime > 10 * Dates.ONE_MINUTE) { // 10 minutes resolution
+    if (lastEventTime == -1 || new Date().getTime() - lastEventTime > 5 * Dates.ONE_MINUTE) { // 5 minutes resolution
       TimeZone tz = SessionUser.getUserTimeZone(request);
       events.registerEvent(AchievementEvents.userAction.name(), tz);
     }
