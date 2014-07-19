@@ -6,13 +6,10 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.buildserver.achievements.AchievementEvents;
 import org.jetbrains.buildserver.achievements.UserEvents;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class AchievementsConfig {
-  private final static List<Achievement> ALL_ACHIEVEMENTS = Arrays.<Achievement>asList(new SimpleAchievement(AchievementEvents.buildUnpinned.name(), 10) {
+  private final static List<Achievement> ALL_ACHIEVEMENTS = Arrays.asList(new SimpleAchievement(AchievementEvents.buildUnpinned.name(), 10) {
     @NotNull
     public String getId() {
       return "cleanupBooster";
@@ -234,23 +231,55 @@ public class AchievementsConfig {
 
     @Nullable
     public String getIconClassNames() {
+      return "icon-twitter";
+    }
+
+    public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, Object additionalData) {
+      if (!(additionalData instanceof java.util.TimeZone)) return false;
+
+      int hour = getLastEventHour(events, (TimeZone) additionalData);
+      return hour <= 8 && hour >= 5;
+    }
+  },
+
+  new Achievement() {
+    @NotNull
+    public String getId() {
+      return "nightOwl";
+    }
+
+    @NotNull
+    public String getName() {
+      return "Night Owl";
+    }
+
+    @NotNull
+    public String getDescription() {
+      return "Granted for some late action on the build server.";
+    }
+
+    @Nullable
+    public String getIconClassNames() {
       return "icon-time";
     }
 
     public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, Object additionalData) {
       if (!(additionalData instanceof java.util.TimeZone)) return false;
 
-      long timestamp = events.getLastEventTime(AchievementEvents.userAction.name());
-      Calendar c = Calendar.getInstance();
-      c.setTimeZone((java.util.TimeZone) additionalData);
-      c.setTime(new Date(timestamp));
-
-      int hour = c.get(Calendar.HOUR_OF_DAY);
-      return hour < 8 && hour >= 5;
+      int hour = getLastEventHour(events, (TimeZone) additionalData);
+      return hour >= 1 && hour <= 4;
     }
   }
 
   );
+
+  private static int getLastEventHour(@NotNull UserEvents events, @NotNull TimeZone additionalData) {
+    long timestamp = events.getLastEventTime(AchievementEvents.userAction.name());
+    Calendar c = Calendar.getInstance();
+    c.setTimeZone(additionalData);
+    c.setTime(new Date(timestamp));
+    return c.get(Calendar.HOUR_OF_DAY);
+  }
 
   @NotNull
   public List<Achievement> getAchievements() {
