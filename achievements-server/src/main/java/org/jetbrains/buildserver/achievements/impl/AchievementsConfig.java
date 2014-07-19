@@ -224,7 +224,7 @@ public class AchievementsConfig {
   new Achievement() {
     @NotNull
     public String getId() {
-      return "earlyBird";
+      return "earlyBird_2";
     }
 
     @NotNull

@@ -38,7 +38,7 @@ public class AchievementsConfigTest extends AchievementsTestCase {
   }
 
   public void early_bird() {
-    Achievement achievement = getAchievement("earlyBird");
+    Achievement achievement = getAchievement("earlyBird_2");
     SUser user = createUser();
     UserEvents userEvents = getUserEvents(user);
 
