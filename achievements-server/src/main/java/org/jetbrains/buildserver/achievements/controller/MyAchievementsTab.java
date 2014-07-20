@@ -8,7 +8,7 @@ import jetbrains.buildServer.web.openapi.SimpleCustomTab;
 import jetbrains.buildServer.web.util.SessionUser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.buildserver.achievements.impl.Achievement;
-import org.jetbrains.buildserver.achievements.impl.AchievementsConfig;
+import org.jetbrains.buildserver.achievements.AchievementsConfig;
 import org.jetbrains.buildserver.achievements.impl.AchievementsGrantor;
 
 import javax.servlet.http.HttpServletRequest;

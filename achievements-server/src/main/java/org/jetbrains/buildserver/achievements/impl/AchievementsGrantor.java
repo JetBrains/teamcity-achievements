@@ -10,6 +10,7 @@ import jetbrains.buildServer.users.UserModel;
 import jetbrains.buildServer.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.buildserver.achievements.AchievementsConfig;
 import org.jetbrains.buildserver.achievements.UserEvents;
 import org.jetbrains.buildserver.achievements.UserEventsListener;
 import org.jetbrains.buildserver.achievements.UserEventsRegistry;

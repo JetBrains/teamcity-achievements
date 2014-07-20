@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans default-autowire="constructor">
-    <bean class="org.jetbrains.buildserver.achievements.impl.AchievementsConfig"/>
     <bean class="org.jetbrains.buildserver.achievements.impl.ServerEventsAdapter"/>
     <bean class="org.jetbrains.buildserver.achievements.impl.UserEventsRegistryImpl"/>
     <bean class="org.jetbrains.buildserver.achievements.impl.AchievementsGrantor"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.AchievementsLoaderPageExtension"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.GrantedAchievementsController"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.MyAchievementsTab"/>
+    <bean class="org.jetbrains.buildserver.achievements.AchievementsConfig">
+        <constructor-arg index="0">
+            <list>
+                <bean class="org.jetbrains.buildserver.achievements.impl.CleanupBooster"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.Saboteur"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.Sapper"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.BoyScout"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.EarlyBird"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.NightOwl"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.Novelist"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.Taxonomist"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.ProductivityBoost"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.BigBrother"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.Crusher"/>
+                <bean class="org.jetbrains.buildserver.achievements.impl.Debugger"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
 </beans>

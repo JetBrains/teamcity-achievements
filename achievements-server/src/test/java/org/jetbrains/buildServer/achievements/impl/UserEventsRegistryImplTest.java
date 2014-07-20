@@ -1,4 +1,4 @@
-package org.jetbrains.buildServer.achievements.impl;
+package org.jetbrains.buildserver.achievements.impl;
 
 import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.users.SUser;
