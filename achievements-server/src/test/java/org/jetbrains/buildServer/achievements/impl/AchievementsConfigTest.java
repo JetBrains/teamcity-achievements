@@ -1,21 +1,21 @@
-package org.jetbrains.buildServer.achievements.impl;
+package org.jetbrains.buildserver.achievements.impl;
 
 import jetbrains.buildServer.users.SUser;
-import org.jetbrains.annotations.NotNull;
+import jetbrains.buildServer.vcs.SVcsModification;
 import org.jetbrains.buildserver.achievements.AchievementEvents;
 import org.jetbrains.buildserver.achievements.UserEvents;
-import org.jetbrains.buildserver.achievements.impl.Achievement;
-import org.jetbrains.buildserver.achievements.impl.AchievementsConfig;
+import org.jmock.Mock;
 import org.testng.annotations.Test;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 @Test
 public class AchievementsConfigTest extends AchievementsTestCase {
 
   public void night_owl() {
-    Achievement achievement = getAchievement("nightOwl");
+    Achievement achievement = new NightOwl();
     SUser user = createUser();
     UserEvents userEvents = getUserEvents(user);
 
@@ -38,7 +38,7 @@ public class AchievementsConfigTest extends AchievementsTestCase {
   }
 
   public void early_bird() {
-    Achievement achievement = getAchievement("earlyBird_2");
+    Achievement achievement = new EarlyBird();
     SUser user = createUser();
     UserEvents userEvents = getUserEvents(user);
 
@@ -60,13 +60,47 @@ public class AchievementsConfigTest extends AchievementsTestCase {
     assertTrue(achievement.shouldGrantAchievement(user, userEvents, AchievementEvents.userAction.name(), tz));
   }
 
+  public void test_productivity_boost_not_granted() {
+    Achievement achievement = new ProductivityBoost(getRegistry());
+    SUser user = createUser();
+    UserEvents userEvents = getUserEvents(user);
+
+    Calendar c = Calendar.getInstance();
+    c.add(Calendar.DAY_OF_MONTH, -2);
+
+    Mock modMock = mock(SVcsModification.class);
+    modMock.stubs().method("getVcsDate").will(returnValue(c.getTime()));
+
+    SVcsModification mod = (SVcsModification) modMock.proxy();
+
+    for (int i=0; i<25; i++) {
+      userEvents.registerEvent(AchievementEvents.changeAdded.name(), mod);
+      assertFalse(achievement.shouldGrantAchievement(user, userEvents, AchievementEvents.changeAdded.name(), mod));
+    }
+  }
+
+  public void test_productivity_boost() {
+    Achievement achievement = new ProductivityBoost(getRegistry());
+    SUser user = createUser();
+    UserEvents userEvents = getUserEvents(user);
+
+    Mock modMock = mock(SVcsModification.class);
+    modMock.stubs().method("getVcsDate").will(returnValue(new Date()));
+
+    SVcsModification mod = (SVcsModification) modMock.proxy();
+
+    for (int i=0; i<19; i++) {
+      userEvents.registerEvent(AchievementEvents.changeAdded.name(), mod);
+      assertFalse(achievement.shouldGrantAchievement(user, userEvents, AchievementEvents.changeAdded.name(), mod));
+    }
+
+    userEvents.registerEvent(AchievementEvents.changeAdded.name(), mod);
+    assertTrue(achievement.shouldGrantAchievement(user, userEvents, AchievementEvents.changeAdded.name(), mod));
+  }
+
   private void setHour(int hour) {
     Calendar c = Calendar.getInstance();
     c.set(Calendar.HOUR_OF_DAY, hour);
     setTime(c.getTime().getTime());
-  }
-
-  private Achievement getAchievement(@NotNull String id) {
-    return new AchievementsConfig().getAchievementsMap().get(id);
   }
 }
