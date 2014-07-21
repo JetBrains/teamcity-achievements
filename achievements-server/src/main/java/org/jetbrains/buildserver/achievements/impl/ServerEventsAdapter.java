@@ -110,6 +110,7 @@ public class ServerEventsAdapter extends BuildServerAdapter {
     super.changeAdded(modification, root, buildTypes);
 
     SVcsModification mod = (SVcsModification) modification;
+    if (mod.getDuplicates().size() > 0) return; // ignore duplicate changes
 
     for (Issue ignored: mod.getRelatedIssues()) {
       for (SUser committer: mod.getCommitters()) {
