@@ -34,5 +34,12 @@ table.achievementsTable td.description {
 }
 
 #myachievements i {
-    padding: 0 2px 0 2px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    padding: 2px 3px;
+    text-align: center;
+    height: 13px;
+    min-width: 13px;
+    display: inline-block;
+    margin-right: 2px;
 }
