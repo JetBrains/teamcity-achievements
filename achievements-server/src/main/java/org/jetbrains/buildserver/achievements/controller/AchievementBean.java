@@ -4,6 +4,7 @@ import jetbrains.buildServer.users.PluginPropertyKey;
 import jetbrains.buildServer.users.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.buildserver.achievements.impl.Achievement;
+import org.jetbrains.buildserver.achievements.impl.AchievementProperties;
 
 public class AchievementBean {
   private final Achievement myAchievement;
@@ -27,6 +28,6 @@ public class AchievementBean {
 
   @NotNull
   private PluginPropertyKey makePropertyKey() {
-    return new PluginPropertyKey("achievements", "achievements", "achievement.hidden." + myAchievement.getId());
+    return AchievementProperties.getHidePropertyKey(myAchievement);
   }
 }

@@ -34,6 +34,7 @@ public class AchievementsGrantor implements UserEventsListener {
   }
 
   public void userEventPublished(@NotNull User user, @NotNull String eventName, @Nullable Object additionalData) {
+    if (!isEnabled(user)) return;
     UserEvents events = myEventsRegistry.getUserEvents(user);
     for (Achievement achievement: myConfig.getAchievements()) {
       if (hasAchievement(user, achievement)) continue;
@@ -45,10 +46,11 @@ public class AchievementsGrantor implements UserEventsListener {
   }
 
   public boolean hasAchievement(@NotNull User user, @NotNull Achievement achievement) {
-    return user.getPropertyValue(makePropertyKey(achievement)) != null;
+    return isEnabled(user) && user.getPropertyValue(makePropertyKey(achievement)) != null;
   }
 
   public void grantAchievement(@NotNull User user, @NotNull Achievement achievement) {
+    if (!isEnabled(user)) return;
     SUser su = (SUser) user;
     su.setUserProperty(makePropertyKey(achievement), String.valueOf(new Date().getTime()));
     LOG.info("User " + LogUtil.describe(user) + " has been granted achievement: " + achievement.getName());
@@ -68,6 +70,7 @@ public class AchievementsGrantor implements UserEventsListener {
 
   @NotNull
   public List<Achievement> getGrantedAchievements(@NotNull User user) {
+    if (!isEnabled(user)) return Collections.emptyList();
     List<Achievement> res = new ArrayList<Achievement>();
     for (Achievement achievement: myConfig.getAchievements()) {
       if (hasAchievement(user, achievement)) {
@@ -85,6 +88,7 @@ public class AchievementsGrantor implements UserEventsListener {
         public Map<Achievement, List<SUser>> run() throws Throwable {
           Map<Achievement, List<SUser>> res = new HashMap<Achievement, List<SUser>>();
           for (SUser user: myUserModel.getAllUsers().getUsers()) {
+            if (!isEnabled(user)) continue;
             for (Achievement achievement: myConfig.getAchievements()) {
               List<SUser> users = res.get(achievement);
               if (users == null) {
@@ -106,9 +110,14 @@ public class AchievementsGrantor implements UserEventsListener {
     return Collections.emptyMap();
   }
 
-  @NotNull
-  private PluginPropertyKey makePropertyKey(@NotNull Achievement achievement) {
-    return new PluginPropertyKey("achievements", "achievements", "achievement.granted." + achievement.getId());
+  public boolean isEnabled(@NotNull User user) {
+    PluginPropertyKey prop = AchievementProperties.getAchievementsEnabledPropertyKey();
+    String val = user.getPropertyValue(prop);
+    return !"false".equals(val);
   }
 
+  @NotNull
+  private PluginPropertyKey makePropertyKey(@NotNull Achievement achievement) {
+    return AchievementProperties.getGrantedPropertyKey(achievement);
+  }
 }

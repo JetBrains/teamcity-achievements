@@ -53,5 +53,6 @@ public class MyAchievementsTab extends SimpleCustomTab {
     model.put("grantedAchievements", granted);
     model.put("availableAchievements", available);
     model.put("allAchievementsMap", myAchievementsGrantor.getAchievementUsersMap());
+    model.put("achievementsEnabled", myAchievementsGrantor.isEnabled(user));
   }
 }
