@@ -15,6 +15,6 @@ public abstract class SimpleAchievement implements Achievement {
   }
 
   public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, @NotNull String lastEventName, @Nullable Object additionalData) {
-    return events.getNumberOfEvents(myEventName) >= myEventsCount;
+    return true || events.getNumberOfEvents(myEventName) >= myEventsCount;
   }
 }

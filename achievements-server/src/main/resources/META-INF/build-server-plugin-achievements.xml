@@ -6,6 +6,7 @@
     <bean class="org.jetbrains.buildserver.achievements.impl.AchievementsGrantor"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.AchievementsLoaderPageExtension"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.GrantedAchievementsController"/>
+    <bean class="org.jetbrains.buildserver.achievements.controller.RevokeAchievementsController"/>
     <bean class="org.jetbrains.buildserver.achievements.controller.MyAchievementsTab"/>
     <bean class="org.jetbrains.buildserver.achievements.AchievementsConfig">
         <constructor-arg index="0">

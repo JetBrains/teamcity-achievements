@@ -3,10 +3,7 @@ package org.jetbrains.buildserver.achievements.impl;
 import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.serverSide.SecurityContextEx;
 import jetbrains.buildServer.serverSide.impl.LogUtil;
-import jetbrains.buildServer.users.PluginPropertyKey;
-import jetbrains.buildServer.users.SUser;
-import jetbrains.buildServer.users.User;
-import jetbrains.buildServer.users.UserModel;
+import jetbrains.buildServer.users.*;
 import jetbrains.buildServer.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +52,18 @@ public class AchievementsGrantor implements UserEventsListener {
     SUser su = (SUser) user;
     su.setUserProperty(makePropertyKey(achievement), String.valueOf(new Date().getTime()));
     LOG.info("User " + LogUtil.describe(user) + " has been granted achievement: " + achievement.getName());
+  }
+
+  public void revokeAchievement(@NotNull User user, @NotNull Achievement achievement) {
+    SUser su = (SUser) user;
+
+    for (PropertyKey pk: su.getProperties().keySet()) {
+      if (pk.getKey().endsWith("." + achievement.getId())) {
+        su.deleteUserProperty(pk);
+      }
+    }
+
+    LOG.info("Achievement " + achievement.getName() + " has been revoked from user " + LogUtil.describe(user));
   }
 
   @NotNull

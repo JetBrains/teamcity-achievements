@@ -5,7 +5,7 @@
 
 <script type="text/javascript">
     var updater = new BS.PeriodicalUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", {
-        frequency: 30,
+        frequency: 90,
         evalScripts: true
     });
 
