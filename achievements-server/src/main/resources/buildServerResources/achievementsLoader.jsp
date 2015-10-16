@@ -21,6 +21,7 @@
 <c:if test="${not empty myAchievements}">
     <c:url var="myachievementsLink" value="/profile.html?tab=teamcity-achievements"/>
     <script type="text/javascript">
+        $j('#myachievements').empty();
         $j('#userPanel #sp_span_usernamePopup').prepend('<span><a id="myachievements" href="${myachievementsLink}"></a></span>');
         <c:forEach items="${myAchievements}" var="a">
         $j('#myachievements').append('<i class="${a.iconClassNames}" title="${a.name}"></i>');
