@@ -26,7 +26,7 @@ public class EarlyBird implements Achievement {
 
   @Nullable
   public String getIconClassNames() {
-    return "icon-twitter";
+    return "icon-twitter early-bird";
   }
 
   public boolean shouldGrantAchievement(@NotNull SUser user, @NotNull UserEvents events, @NotNull String lastEventName, Object additionalData) {
