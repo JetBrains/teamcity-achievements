@@ -64,7 +64,7 @@ table.achievementsTable td.description {
     background-image: url(early-bird.png);
     background-repeat: no-repeat;
     background-size: 12px 12px;
-    background-position: 4px 2px;
+    background-position: 0;
     color: transparent;
 }
 
