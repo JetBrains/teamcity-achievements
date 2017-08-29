@@ -68,6 +68,10 @@ table.achievementsTable td.description {
     color: transparent;
 }
 
+#myachievements .early-bird {
+    background-position: 4px 2px;
+}
+
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),
 only screen and (min--moz-device-pixel-ratio: 2),
