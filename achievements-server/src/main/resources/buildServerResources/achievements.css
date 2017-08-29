@@ -72,6 +72,10 @@ table.achievementsTable td.description {
     background-position: 4px 2px;
 }
 
+.achieventName .early-bird {
+    filter: grayscale(1) brightness(23%);
+}
+
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),
 only screen and (min--moz-device-pixel-ratio: 2),
