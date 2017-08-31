@@ -72,7 +72,7 @@ table.achievementsTable td.description {
     background-position: 4px 2px;
 }
 
-.achieventName .early-bird {
+.achievementName .early-bird {
     filter: grayscale(1) brightness(23%);
 }
 
