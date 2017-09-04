@@ -74,7 +74,7 @@ table.achievementsTable td.description {
 }
 
 .achievementName .early-bird {
-    filter: grayscale(1) brightness(23%);
+    background-image: url(early-bird_black.png);
 }
 
 @media
@@ -87,4 +87,9 @@ only screen and (min-resolution: 2dppx) {
     .early-bird{
         background-image: url(early-bird@2x.png);
     }
+
+    .achievementName .early-bird {
+        background-image: url(early-bird_black@2x.png);
+    }
+
 }
