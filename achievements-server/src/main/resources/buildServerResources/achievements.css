@@ -59,7 +59,7 @@ table.achievementsTable td.description {
     margin-right: 2px;
 }
 
-.early-bird{
+.early-bird.early-bird {
     display: inline-block;
     background-color: transparent;
     background-image: url(early-bird.png);
@@ -84,7 +84,7 @@ only screen and (-o-min-device-pixel-ratio: 200 / 100),
 only screen and (min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dpi),
 only screen and (min-resolution: 2dppx) {
-    .early-bird{
+    .early-bird.early-bird {
         background-image: url(early-bird@2x.png);
     }
 
