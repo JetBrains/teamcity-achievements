@@ -1,4 +1,5 @@
 
+[![official JetBrains project](http://jb.gg/badges/official-plastic.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 TeamCity Achievements plugin
 
 This plugin grants achievements to TeamCity users for different actions.
@@ -36,11 +37,6 @@ Taxonomist 	    - Granted for tagging several builds in a row.
 Novelist 	      - Granted for extra long commit descriptions.
 Boy Scout 	    - Granted for assigning several investigations for a test or problem to himself.
 Early Bird 	    - Granted for some early action on the build server.
-
-License
-==========
-
-Apache License 2.0
 
 
 Author
