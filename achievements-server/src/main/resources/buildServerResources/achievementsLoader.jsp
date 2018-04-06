@@ -6,13 +6,12 @@
 <script type="text/javascript">
     var updater = new BS.PeriodicalUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", {
         frequency: 90,
-        evalScripts: true
+        evalScripts: true,
+        method: 'get'
     });
 
     $('grantedAchievements').refresh = function() {
         BS.ajaxUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", { method: 'get' });
-    }
-        BS.ajaxUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html");
     };
 
     $j('#bodyWrapper').on("click", function() {
