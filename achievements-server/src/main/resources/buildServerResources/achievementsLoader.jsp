@@ -1,8 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/include.jsp"%>
 <jsp:useBean id="myAchievements" type="java.util.List" scope="request"/>
+<jsp:useBean id="myAchievementsEnabled" type="java.lang.Boolean" scope="request"/>
 <div id="grantedAchievements"></div>
-
+<c:if test="${myAchievementsEnabled}">
 <script type="text/javascript">
     var updater = new BS.PeriodicalUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", {
         frequency: 90,
@@ -28,4 +29,5 @@
         $j('#myachievements').append('<i class="${a.iconClassNames}" title="${a.name}"></i>');
         </c:forEach>
     </script>
+</c:if>
 </c:if>
