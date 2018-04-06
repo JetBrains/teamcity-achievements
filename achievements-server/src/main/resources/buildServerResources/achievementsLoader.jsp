@@ -10,6 +10,8 @@
     });
 
     $('grantedAchievements').refresh = function() {
+        BS.ajaxUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", { method: 'get' });
+    }
         BS.ajaxUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html");
     };
 
