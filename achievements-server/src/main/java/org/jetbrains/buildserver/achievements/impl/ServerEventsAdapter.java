@@ -133,6 +133,9 @@ public class ServerEventsAdapter extends BuildServerAdapter {
   }
 
   private boolean notifyInvestigationDelegated(@NotNull ResponsibilityEntry entry) {
+    if (entry.getState() == ResponsibilityEntry.State.NONE) {
+      return false;
+    }
     User responsible = entry.getResponsibleUser();
     User reporter = entry.getReporterUser();
     if (reporter != null && reporter.getId() != responsible.getId()) {
@@ -144,6 +147,9 @@ public class ServerEventsAdapter extends BuildServerAdapter {
   }
 
   private boolean notifyInvestigationTaken(@NotNull ResponsibilityEntry entry) {
+    if (entry.getState() == ResponsibilityEntry.State.NONE) {
+      return false;
+    }
     User responsible = entry.getResponsibleUser();
     User reporter = entry.getReporterUser();
     if (reporter != null && reporter.getId() == responsible.getId()) {
