@@ -15,8 +15,12 @@
         BS.ajaxUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", { method: 'get' });
     };
 
+    var userActionTid = null;
     $j('#bodyWrapper').on("click", function() {
-        BS.ajaxRequest(window['base_uri'] + "/grantedAchievements.html?userAction=true");
+        if (userActionTid != null) window.clearTimeout(userActionTid);
+        userActionTid = window.setTimeout(function() {
+          BS.ajaxRequest(window['base_uri'] + "/grantedAchievements.html?userAction=true");
+        }, 5000);
     });
 </script>
 
