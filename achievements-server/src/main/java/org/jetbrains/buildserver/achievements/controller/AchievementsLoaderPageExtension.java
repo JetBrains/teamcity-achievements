@@ -16,20 +16,11 @@
 
 package org.jetbrains.buildserver.achievements.controller;
 
-import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PlaceId;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.SimplePageExtension;
-import jetbrains.buildServer.web.util.SessionUser;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.buildserver.achievements.impl.Achievement;
-import org.jetbrains.buildserver.achievements.impl.AchievementsGrantor;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 public class AchievementsLoaderPageExtension extends SimplePageExtension {
 
