@@ -32,33 +32,14 @@ import java.util.List;
 import java.util.Map;
 
 public class AchievementsLoaderPageExtension extends SimplePageExtension {
-  private final AchievementsGrantor myAchievementsGrantor;
 
   public AchievementsLoaderPageExtension(@NotNull PagePlaces pagePlaces,
-                                         @NotNull PluginDescriptor pluginDescriptor,
-                                         @NotNull AchievementsGrantor achievementsGrantor) {
+                                         @NotNull PluginDescriptor pluginDescriptor) {
     super(pagePlaces);
-    myAchievementsGrantor = achievementsGrantor;
     setPluginName(pluginDescriptor.getPluginName());
-    setPlaceId(PlaceId.BEFORE_CONTENT);
-    setIncludeUrl(pluginDescriptor.getPluginResourcesPath("/achievementsLoader.jsp"));
+    setPlaceId(PlaceId.SAKURA_HEADER_BEFORE_NAME);
+    setIncludeUrl("/grantedAchievements.html");
     addCssFile(pluginDescriptor.getPluginResourcesPath("/achievements.css"));
     register();
-  }
-
-  @Override
-  public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request) {
-    super.fillModel(model, request);
-
-    SUser user = SessionUser.getUser(request);
-    boolean enabled = user != null && myAchievementsGrantor.isEnabled(user);
-
-    if (enabled) {
-      List<Achievement> granted = myAchievementsGrantor.getGrantedAchievements(SessionUser.getUser(request));
-      model.put("myAchievements", granted);
-    } else {
-      model.put("myAchievements", Collections.emptyList());
-    }
-    model.put("myAchievementsEnabled", enabled);
   }
 }

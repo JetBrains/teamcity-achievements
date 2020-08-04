@@ -33,10 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 public class GrantedAchievementsController extends BaseController {
   private final AchievementsGrantor myAchievementsGrantor;
@@ -64,6 +61,12 @@ public class GrantedAchievementsController extends BaseController {
       return null;
     }
 
+    if (isInitialLoad(request)) {
+      ModelAndView mv = new ModelAndView(myPluginDescriptor.getPluginResourcesPath("/achievementsLoader.jsp"));
+      fillModel(mv.getModel(), request, user);
+      return mv;
+    }
+
     List<Achievement> granted = myAchievementsGrantor.getGrantedAchievements(user);
 
     List<AchievementBean> newAchievements = new ArrayList<AchievementBean>();
@@ -78,6 +81,10 @@ public class GrantedAchievementsController extends BaseController {
     return mv;
   }
 
+  private boolean isInitialLoad(@NotNull HttpServletRequest request) {
+    return request.getParameter("activeEntities") != null;
+  }
+
   private void reportUserAction(@NotNull SUser user, @NotNull HttpServletRequest request) {
     UserEvents events = myUserEventsRegistry.getUserEvents(user);
     long lastEventTime = events.getLastEventTime(AchievementEvents.userAction.name());
@@ -86,4 +93,17 @@ public class GrantedAchievementsController extends BaseController {
       events.registerEvent(AchievementEvents.userAction.name(), tz);
     }
   }
+
+  private void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request, final SUser user) {
+    boolean enabled = user != null && myAchievementsGrantor.isEnabled(user);
+
+    if (enabled) {
+      List<Achievement> granted = myAchievementsGrantor.getGrantedAchievements(SessionUser.getUser(request));
+      model.put("myAchievements", granted);
+    } else {
+      model.put("myAchievements", Collections.emptyList());
+    }
+    model.put("myAchievementsEnabled", enabled);
+  }
+
 }

@@ -18,7 +18,19 @@
 
 <jsp:useBean id="myAchievements" type="java.util.List" scope="request"/>
 <jsp:useBean id="myAchievementsEnabled" type="java.lang.Boolean" scope="request"/>
-<div id="grantedAchievements"></div>
+<div id="grantedAchievements">
+    <c:if test="${not empty myAchievements}">
+        <c:url var="myachievementsLink" value="/profile.html?tab=teamcity-achievements"/>
+        <a id="myachievements" href="${myachievementsLink}">
+            <c:forEach items="${myAchievements}" var="a">
+                <i class="${a.iconClassNames}" title="${a.name}"></i>
+            </c:forEach>
+        </a>
+    </c:if>
+</div>
+
+<%--
+
 <c:if test="${myAchievementsEnabled}">
 <script type="text/javascript">
     var updater = new BS.PeriodicalUpdater('grantedAchievements', window['base_uri'] + "/grantedAchievements.html", {
@@ -51,3 +63,5 @@
     </script>
 </c:if>
 </c:if>
+
+  --%>
