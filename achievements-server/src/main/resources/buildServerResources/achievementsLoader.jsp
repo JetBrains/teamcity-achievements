@@ -29,6 +29,18 @@
     </c:if>
 </div>
 
+<script>
+    (function() {
+        const plugin = TeamcityReactAPI.pluginRegistry.searchByPlaceId("SAKURA_HEADER_BEFORE_NAME", 'teamcity-achievements');
+        plugin.onMount(function(location) {
+            console.warn("onMount", location)
+        });
+        plugin.onUnmount(function(location) {
+            console.warn("onMount", location)
+        });
+
+    })()
+</script>
 <%--
 
 <c:if test="${myAchievementsEnabled}">
