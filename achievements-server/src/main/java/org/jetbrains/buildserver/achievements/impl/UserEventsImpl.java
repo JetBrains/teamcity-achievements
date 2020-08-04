@@ -21,13 +21,12 @@ import jetbrains.buildServer.util.Dates;
 import jetbrains.buildServer.util.TimeService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.buildserver.achievements.UserEvents;
-import org.jfree.data.time.TimeSeries;
 
 import java.util.*;
 
 public abstract class UserEventsImpl implements UserEvents {
   private final static Logger LOG = Logger.getInstance(UserEventsImpl.class.getName());
-  private Map<String, ArrayList<Long>> myEventLog = new HashMap<String, ArrayList<Long>>(); // event name => list of timestamps when event happened
+  private final Map<String, ArrayList<Long>> myEventLog = new HashMap<>(); // event name => list of timestamps when event happened
   private final TimeService myTimeService;
 
   protected UserEventsImpl(@NotNull TimeService timeService) {
@@ -35,11 +34,7 @@ public abstract class UserEventsImpl implements UserEvents {
   }
 
   public synchronized void registerEvent(@NotNull String eventName) {
-    ArrayList<Long> eventLog = myEventLog.get(eventName);
-    if (eventLog == null) {
-      eventLog = new ArrayList<Long>();
-      myEventLog.put(eventName, eventLog);
-    }
+    ArrayList<Long> eventLog = myEventLog.computeIfAbsent(eventName, k -> new ArrayList<>());
 
     long mostRecentEvent = myTimeService.now();
     long oldestEvent = mostRecentEvent - Dates.ONE_DAY;
@@ -65,7 +60,7 @@ public abstract class UserEventsImpl implements UserEvents {
   public synchronized List<Long> getEventTimes(@NotNull String eventName) {
     ArrayList<Long> eventLog = myEventLog.get(eventName);
     if (eventLog == null) return Collections.emptyList();
-    ArrayList<Long> result = new ArrayList<Long>(eventLog);
+    ArrayList<Long> result = new ArrayList<>(eventLog);
     Collections.reverse(result);
     return result;
   }

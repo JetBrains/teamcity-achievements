@@ -140,8 +140,8 @@ public class ServerEventsAdapter extends BuildServerAdapter {
   }
 
   @Override
-  public void buildTagsChanged(@NotNull SBuild build, User user, @NotNull List<String> oldTags, @NotNull List<String> newTags) {
-    super.buildTagsChanged(build, user, oldTags, newTags);
+  public void buildPromotionTagsChanged(@NotNull BuildPromotion buildPromotion, @Nullable User user, @NotNull Collection<TagData> oldTags, @NotNull Collection<TagData> newTags) {
+    super.buildPromotionTagsChanged(buildPromotion, user, oldTags, newTags);
 
     if (user != null && !newTags.isEmpty()) {
       registerUserEvent(user, AchievementEvents.buildTagged.name());
